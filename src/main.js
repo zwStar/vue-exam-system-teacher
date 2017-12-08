@@ -9,6 +9,14 @@ import 'iview/dist/styles/iview.css';    // 使用 CSS
 Vue.config.productionTip = false
 
 Vue.use(iView);
+
+router.beforeEach((to, from, next) => {
+ if(!localStorage.getItem('teacherNo') && to.path !=='/login'){
+   next('/login');
+ }else{
+   next();
+ }
+})
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

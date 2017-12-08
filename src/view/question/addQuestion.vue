@@ -1,13 +1,5 @@
 <template>
-  <div id="question">
-    <Input icon="ios-search"></Input>
-    <Button type="primary" @click="show()">增加题目</Button>
-
-    <Modal
-      v-model="modal1"
-      title="增加题目"
-      @on-ok="ok"
-      @on-cancel="cancel">
+  <div class="add_question">
       <!--选择年级-->
       <Row align="middle" type="flex">
         <Col span="12">
@@ -107,17 +99,16 @@
         <Input v-model="formData.answer" placeholder="输入正确答案,用逗号分离"></Input>
         </Col>
       </Row>
-    </Modal>
+    <Button type="primary" long  @click="ok()">提交</Button>
   </div>
 </template>
 
 <script>
-  import {add_question} from '@/api/request'
+  import {add_question} from '@/api/question'
 
   export default {
     data() {
       return {
-        modal1: true,
         gradeList: [
           {
             label: '一年级',
@@ -143,7 +134,7 @@
             label: '六年级',
             value: '六年级'
           }
-        ],
+        ],  //年级可选列表
         subjectList: [
           {
             label: '语文',
@@ -157,17 +148,7 @@
             label: '英语',
             value: '英语'
           }
-        ],
-        genderList: [
-          {
-            label: '男',
-            value: '男'
-          },
-          {
-            label: '女',
-            value: '女'
-          }
-        ],
+        ],  //科目可选列表
         typeList: [
           {
             label: '判断题',
@@ -181,46 +162,47 @@
             label: '填空题',
             value: 3
           }
-        ],
-        choice_options: {
+        ],      //题目类型
+        choice_options: { //选择题选项
           A: '', B: '', C: '', D: ''
         },
         formData: {
-          grade: '',
-          subject: '',
-          question: '',
-          answer: '',
-          teacherNo: '10001',
-          type: null,
-          options: ''
+          grade: '',  //年级
+          subject: '',  //科目
+          question: '', //题目
+          answer: '',   //答案
+          type: null,   //类型
+          options: ''   //选项
         }
-
       }
     },
     methods: {
-      ok() {
+      ok() {  //提交
+        this.formData.options = ''; //因为选项是由数组拼接成字符串提交 因为页面不用每次提交就刷新 所以第二次提交把选项内容清空
         if (this.formData.type === 2) {
           let keys = Object.keys(this.choice_options);
-          for (let i = 0; i < keys.length; i++) {
-              this.formData.options += keys[i] + ':' + this.choice_options[keys[i]]
-          }
+          keys.forEach((key)=>{
+            this.formData.options += key + ':' + this.choice_options[key] + ';'
+          })
         }
-        console.log('options',this.formData.options)
-        add_question(this.formData).then((result) => {
-          console.log(result);
+        add_question(this.formData).then((response) => {
+          let data =response.data;
+          if(data.status ===1 ){
+            this.$Message.success(data.message)
+          }else{
+            this.$Message.error(data.message);
+          }
         })
-      },
-      cancel() {
-        this.modal1 = false;
-      },
-      show() {
-        this.modal1 = true;
       }
     }
   }
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
+  .add_question{
+    width: 400px;
+    margin:200px 0 0 400px;
+  }
   .ivu-row {
     margin: 10px 0;
   }
