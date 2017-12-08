@@ -29,6 +29,8 @@
           console.log(response)
           let data = response.data;
           data.data.forEach((el,index)=>{
+            this.axis_data=[];
+            this.data = [];
             this.axis_data.push(el.studentNo);
             this.data.push(el.score);
             this.init_charts();
@@ -97,6 +99,7 @@
 
       get_exams_list({}).then((response)=>{
         let data = response.data;
+
         data.data.forEach((el)=>{
           this.examList.push({value:el.id,label: `${moment(el.examDay * 1000).format('YYYY/MM/DD')} ${el.grade} ${el.subject}` })
         })
