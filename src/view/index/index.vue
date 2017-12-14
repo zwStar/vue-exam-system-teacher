@@ -88,7 +88,7 @@
     },
     mounted(){
       this.teacherNo = localStorage.getItem('teacherNo');
-      this.name = localStorage.getItem('name');
+      this.name = localStorage.getItem('teacherName');
 
     }
   }

@@ -51,7 +51,7 @@
             login(this.formCustom).then((response)=>{
               let data = response.data;
               if(data.status ===1){
-                localStorage.setItem('name',data.data.name);
+                localStorage.setItem('teacherName',data.data.name);
                 localStorage.setItem('teacherNo',data.data.teacherNo);
                 this.$router.push({path:'/'});
               }else{

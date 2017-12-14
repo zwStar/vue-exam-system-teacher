@@ -28,9 +28,9 @@
         get_score_spread({exam_id: this.exam_id}).then((response) => {
           console.log(response)
           let data = response.data;
+          this.axis_data=[];
+          this.data = [];
           data.data.forEach((el,index)=>{
-            this.axis_data=[];
-            this.data = [];
             this.axis_data.push(el.studentNo);
             this.data.push(el.score);
             this.init_charts();
@@ -74,7 +74,7 @@
           },
           series: [
             {
-              name:'最高分数',
+              name:'分数',
               type:'line',
               data:this.data,
               markPoint: {

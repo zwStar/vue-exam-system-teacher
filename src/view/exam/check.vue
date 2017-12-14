@@ -1,6 +1,6 @@
 <template>
   <div class="check">
-    <h1>判断题</h1>
+    <h1>判断题 （每道题{{pre_judge_score}}分）</h1>
     <div v-for="(list,index) in question_list.judgeList">
       <p class="question">{{index + 1}}. {{list.question}}</p>
       <span>考生答案: {{judge_answer[index]}}</span>
@@ -9,7 +9,7 @@
       <span v-else><Icon type="close-round"></Icon></span>
     </div>
     <span class="score">获得的判断题总分是: <strong>{{judge_score}}</strong> </span>
-    <h1>选择题</h1>
+    <h1>选择题（每道题{{pre_select_score}}分）</h1>
     <div v-for="(list,index) in question_list.selectList">
       <p class="question">{{index + 1}}. {{list.question}}</p>
       <span>考生答案: {{select_answer[index]}}   </span>
@@ -18,7 +18,7 @@
       <span v-else><Icon type="close-round"></Icon></span>
     </div>
     <span class="score">获得的选择题总分是: <strong>{{select_score}}</strong> </span>
-    <h1>填空题</h1>
+    <h1>填空题 （每道题{{pre_insert_score}}分）</h1>
     <div v-for="(list,index) in question_list.insertList">
       <p class="question">{{index + 1}}. {{list.question}}</p>
       <p style="margin:10px 0;">考生答案: {{insert_answer[index]}}</p>
@@ -46,6 +46,9 @@
         judge_score:0,      //判断题分数
         select_score:0,     //选择题分数
         insert_score:[],     //填空题分数
+        pre_judge_score:0,
+        pre_select_score:0,
+        pre_insert_score:0,
         id:null
       }
     },
@@ -82,6 +85,11 @@
       get_exam(this.$route.query).then((result)=>{
         console.log(result);
         let data = result.data.data;
+        //每道题分数
+        this.pre_judge_score=data.judge_question_score;
+          this.pre_select_score = data.select_question_score;
+          this.pre_insert_score = data.insert_question_score;
+
         //获取id
         this.id = data.id;
         //获取考生判断题答案

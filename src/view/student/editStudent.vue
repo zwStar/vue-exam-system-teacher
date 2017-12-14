@@ -9,7 +9,7 @@
       @on-cancel="cancel">
       <Form ref="formInline" :model="formData">
         <FormItem>
-          <Input placeholder="学号" v-model="formData.studentNo"></Input>
+          <Input placeholder="学号" v-model="formData.studentNo" disabled></Input>
         </FormItem>
         <FormItem>
           <Input placeholder="姓名" v-model="formData.name"></Input>
@@ -151,7 +151,8 @@
           if (data.status === -1) {   //错误
             this.$Message.error(data.message);
           } else {
-            this.student_data.splice(index, 1, this.formData); //通过splice 替换数据 触发视图更新
+//            this.student_data.splice(index, 1, this.formData); //通过splice 替换数据 触发视图更新
+            this.fetch_student();
             this.$Message.success(data.message);
           }
         })
@@ -172,13 +173,16 @@
             this.$Message.success(data.message);
           }
         })
+      },
+      fetch_student(){
+        get_students({}).then((response) => {
+          let data = response.data;
+          this.student_data = data.data;
+        })
       }
     },
     mounted() {
-      get_students({}).then((response) => {
-        let data = response.data;
-        this.student_data = data.data;
-      })
+      this.fetch_student();
     }
   }
 </script>
